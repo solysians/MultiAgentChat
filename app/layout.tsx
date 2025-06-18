@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-page-custom-font */
- 
+
 import "./styles/globals.scss";
 import "./styles/markdown.scss";
 import "./styles/highlight.scss";
@@ -9,6 +9,7 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import { GoogleTagManager, GoogleAnalytics } from "@next/third-parties/google";
 import { getServerSideConfig } from "./config/server";
 import ClientLayout from "./ClientLayout";
+import { RazorpayScript } from "./components/razorpay-script";
 
 export const metadata: Metadata = {
   title: "NextChat",
@@ -54,6 +55,7 @@ export default function RootLayout({
         </head>
         <body>
           {children}
+          <RazorpayScript />
           {serverConfig?.isVercel && (
             <>
               <SpeedInsights />

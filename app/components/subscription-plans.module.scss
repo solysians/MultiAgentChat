@@ -1,0 +1,119 @@
+
+.subscription-plans {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+  padding: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.plan-card {
+  border: 2px solid var(--border-color);
+  border-radius: 12px;
+  padding: 24px;
+  background: var(--white);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+
+  &:hover {
+    border-color: var(--primary);
+    transform: translateY(-4px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  }
+
+  &:nth-child(2) {
+    border-color: var(--primary);
+    position: relative;
+
+    &::before {
+      content: "Most Popular";
+      position: absolute;
+      top: 0;
+      right: 0;
+      background: var(--primary);
+      color: white;
+      padding: 4px 12px;
+      font-size: 12px;
+      font-weight: 500;
+      border-bottom-left-radius: 8px;
+    }
+  }
+}
+
+.plan-header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.plan-name {
+  font-size: 24px;
+  font-weight: 600;
+  margin: 0 0 12px 0;
+  color: var(--black);
+}
+
+.plan-price {
+  font-size: 48px;
+  font-weight: 700;
+  color: var(--primary);
+  line-height: 1;
+}
+
+.plan-interval {
+  font-size: 16px;
+  font-weight: 400;
+  color: var(--gray);
+}
+
+.plan-features {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 32px 0;
+}
+
+.feature-item {
+  padding: 8px 0;
+  color: var(--black);
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+
+  &:before {
+    content: "✓";
+    color: var(--green);
+    font-weight: 600;
+    margin-right: 12px;
+    font-size: 16px;
+  }
+}
+
+.subscribe-button {
+  width: 100%;
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+@media (max-width: 768px) {
+  .subscription-plans {
+    grid-template-columns: 1fr;
+    padding: 16px;
+  }
+
+  .plan-card {
+    padding: 20px;
+  }
+
+  .plan-price {
+    font-size: 36px;
+  }
+}

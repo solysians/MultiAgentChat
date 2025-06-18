@@ -17,3 +17,21 @@ export function trackAuthorizationPageBannerToCPaymentClick() {
 export function trackSettingsPageGuideToCPaymentClick() {
   sendGAEvent("event", "SettingsPageGuideToCPaymentClick", { value: 1 });
 }
+
+export function trackSubscriptionPlanSelected(planId: string) {
+  sendGAEvent("event", "SubscriptionPlanSelected", {
+    value: 1,
+    custom_parameters: { plan_id: planId },
+  });
+}
+
+export function trackSubscriptionPaymentSuccess(subscriptionId: string) {
+  sendGAEvent("event", "SubscriptionPaymentSuccess", {
+    value: 1,
+    custom_parameters: { subscription_id: subscriptionId },
+  });
+}
+
+export function trackSubscriptionCancellation() {
+  sendGAEvent("event", "SubscriptionCancellation", { value: 1 });
+}
