@@ -20,6 +20,9 @@ import ConnectionIcon from "../icons/connection.svg";
 import CloudSuccessIcon from "../icons/cloud-success.svg";
 import CloudFailIcon from "../icons/cloud-fail.svg";
 import { trackSettingsPageGuideToCPaymentClick } from "../utils/auth-settings-events";
+import { SubscriptionPlans } from "./subscription-plans";
+import { SubscriptionStatus } from "./subscription-status";
+import { useSubscriptionStore } from "../store/subscription";
 import {
   Input,
   List,
@@ -644,6 +647,9 @@ export function Settings() {
   const builtinCount = SearchService.count.builtin;
   const customCount = promptStore.getUserPrompts().length ?? 0;
   const [shouldShowPromptModal, setShowPromptModal] = useState(false);
+  const [shouldShowSubscriptionModal, setShowSubscriptionModal] =
+    useState(false);
+  const subscriptionStore = useSubscriptionStore();
 
   const showUsage = accessStore.isAuthorized();
   useEffect(() => {
@@ -715,6 +721,34 @@ export function Settings() {
           window.location.href = SAAS_CHAT_URL;
         }}
       />
+    </ListItem>
+  );
+
+  const subscriptionManagementComponent = (
+    <ListItem
+      title="Subscription Management"
+      subTitle={
+        subscriptionStore.hasValidSubscription()
+          ? `Active: ${subscriptionStore.currentPlan?.name || "Unknown Plan"}`
+          : "Choose a subscription plan to unlock premium features"
+      }
+    >
+      {subscriptionStore.hasValidSubscription() ? (
+        <IconButton
+          icon={<ConfigIcon />}
+          text="Manage Plan"
+          onClick={() => setShowSubscriptionModal(true)}
+          bordered
+        />
+      ) : (
+        <IconButton
+          icon={<FireIcon />}
+          text="View Plans"
+          type="primary"
+          onClick={() => setShowSubscriptionModal(true)}
+          bordered
+        />
+      )}
     </ListItem>
   );
 
@@ -1776,6 +1810,8 @@ export function Settings() {
 
         <List id={SlotID.CustomModel}>
           {saasStartComponent}
+          {subscriptionManagementComponent}
+          {subscriptionStore.hasValidSubscription() && <SubscriptionStatus />}
           {accessCodeComponent}
 
           {!accessStore.hideUserApiKey && (
@@ -1886,6 +1922,10 @@ export function Settings() {
 
         {shouldShowPromptModal && (
           <UserPromptModal onClose={() => setShowPromptModal(false)} />
+        )}
+
+        {shouldShowSubscriptionModal && (
+          <SubscriptionPlans onClose={() => setShowSubscriptionModal(false)} />
         )}
         <List>
           <RealtimeConfigList

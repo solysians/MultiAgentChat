@@ -12,6 +12,7 @@ import MaskIcon from "../icons/mask.svg";
 import McpIcon from "../icons/mcp.svg";
 import DragIcon from "../icons/drag.svg";
 import DiscoveryIcon from "../icons/discovery.svg";
+import { useSession, signIn, signOut } from "next-auth/react";
 
 import Locale from "../locales";
 
@@ -228,10 +229,12 @@ export function SideBar(props: { className?: string }) {
   useHotKey();
   const { onDragStart, shouldNarrow } = useDragSideBar();
   const [showDiscoverySelector, setshowDiscoverySelector] = useState(false);
+  const [showLoginSelector, setShowLoginSelector] = useState(false);
   const navigate = useNavigate();
   const config = useAppConfig();
   const chatStore = useChatStore();
   const [mcpEnabled, setMcpEnabled] = useState(false);
+  const { data: session } = useSession();
 
   useEffect(() => {
     // 检查 MCP 是否启用
@@ -304,6 +307,28 @@ export function SideBar(props: { className?: string }) {
             }}
           />
         )}
+        {showLoginSelector && (
+          <Selector
+            items={[
+              {
+                title: "Sign in with Google",
+                value: "google",
+              },
+              {
+                title: "Sign in with Email",
+                value: "email",
+              },
+            ]}
+            onClose={() => setShowLoginSelector(false)}
+            onSelection={(s) => {
+              const provider = s[0];
+              if (provider === "google" || provider === "email") {
+                signIn(provider);
+              }
+              setShowLoginSelector(false);
+            }}
+          />
+        )}
       </SideBarHeader>
       <SideBarBody
         onClick={(e) => {
@@ -344,6 +369,25 @@ export function SideBar(props: { className?: string }) {
                   shadow
                 />
               </a>
+            </div>
+            <div className={styles["sidebar-action"]}>
+              {session ? (
+                <IconButton
+                  aria="Sign Out"
+                  icon={<ChatGptIcon />}
+                  text={shouldNarrow ? undefined : "Sign Out"}
+                  onClick={() => signOut()}
+                  shadow
+                />
+              ) : (
+                <IconButton
+                  aria="Sign In"
+                  icon={<ChatGptIcon />}
+                  text={shouldNarrow ? undefined : "Sign In"}
+                  onClick={() => setShowLoginSelector(true)}
+                  shadow
+                />
+              )}
             </div>
           </>
         }
